@@ -5,11 +5,303 @@ import plotly.graph_objects as go
 import google.generativeai as genai
 from gemini_api import get_api_keys, generate_with_failover
 
+def apply_modern_clean_css():
+    st.markdown("""
+        <style>
+        /* Premium dark theme font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        /* Dark base - like the dashboard */
+        .main {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            padding: 2rem;
+        }
+
+        /* Dark headers with contrast */
+        h1 {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 2.25rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            color: #e5e5e5;
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        p {
+            color: #a3a3a3;
+            line-height: 1.6;
+        }
+
+        /* Metrics with dark cards */
+        [data-testid="stMetric"] {
+            background-color: #1a1a1a;
+            padding: 2rem 1.5rem;
+            border-radius: 16px;
+            border: 1px solid #262626;
+        }
+
+        [data-testid="stMetricValue"] {
+            color: #ffffff !important;
+            font-size: 2.75rem !important;
+            font-weight: 700 !important;
+        }
+
+        [data-testid="stMetricLabel"] {
+            color: #a3a3a3 !important;
+            font-weight: 500 !important;
+            font-size: 0.875rem !important;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Dark elegant buttons */
+        .stButton>button {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 24px;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            transition: all 0.3s ease;
+        }
+
+        .stButton>button:hover {
+            background-color: #e5e5e5;
+            transform: scale(1.02);
+        }
+
+        /* Dark sidebar */
+        [data-testid="stSidebar"] {
+            background-color: #0f0f0f;
+            border-right: 1px solid #262626;
+        }
+
+        [data-testid="stSidebar"] h1,
+        [data-testid="stSidebar"] h2,
+        [data-testid="stSidebar"] h3 {
+            color: #ffffff !important;
+        }
+
+        [data-testid="stSidebar"] label,
+        [data-testid="stSidebar"] p {
+            color: #a3a3a3 !important;
+        }
+
+        /* Modern dark tabs */
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 8px;
+            background-color: #1a1a1a;
+            padding: 8px;
+            border-radius: 16px;
+            border: 1px solid #262626;
+        }
+
+        .stTabs [data-baseweb="tab"] {
+            background-color: transparent;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            color: #737373;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .stTabs [data-baseweb="tab"]:hover {
+            background-color: #262626;
+            color: #e5e5e5;
+        }
+
+        .stTabs [aria-selected="true"] {
+            background-color: #ffffff;
+            color: #000000 !important;
+        }
+
+        /* Dark file uploader */
+        [data-testid="stFileUploader"] {
+            background-color: #1a1a1a;
+            border: 2px dashed #404040;
+            border-radius: 16px;
+            padding: 3rem 2rem;
+        }
+
+        [data-testid="stFileUploader"]:hover {
+            border-color: #737373;
+        }
+
+        /* Dark elegant table */
+        .dataframe {
+            border: 1px solid #262626 !important;
+            border-radius: 12px !important;
+            overflow: hidden;
+            background-color: #1a1a1a;
+        }
+
+        .dataframe thead tr th {
+            background-color: #0f0f0f !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            padding: 16px !important;
+            border-bottom: 1px solid #262626 !important;
+            text-transform: uppercase;
+            font-size: 0.75rem !important;
+            letter-spacing: 0.1em;
+        }
+
+        .dataframe tbody tr {
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #1f1f1f;
+        }
+
+        .dataframe tbody tr:hover {
+            background-color: #262626;
+        }
+
+        .dataframe td {
+            padding: 14px 16px !important;
+            color: #e5e5e5 !important;
+            border-color: #262626 !important;
+        }
+
+        /* Dark alerts with colored accents */
+        .stSuccess {
+            background-color: #0f1f14 !important;
+            border-left: 4px solid #22c55e !important;
+            border-radius: 12px;
+            padding: 1rem !important;
+            color: #86efac !important;
+        }
+
+        .stInfo {
+            background-color: #0f1419 !important;
+            border-left: 4px solid #3b82f6 !important;
+            border-radius: 12px;
+            padding: 1rem !important;
+            color: #93c5fd !important;
+        }
+
+        .stWarning {
+            background-color: #1f1a0f !important;
+            border-left: 4px solid #f59e0b !important;
+            border-radius: 12px;
+            padding: 1rem !important;
+            color: #fcd34d !important;
+        }
+
+        .stError {
+            background-color: #1f0f0f !important;
+            border-left: 4px solid #ef4444 !important;
+            border-radius: 12px;
+            padding: 1rem !important;
+            color: #fca5a5 !important;
+        }
+
+        /* Dark input fields */
+        .stTextInput>div>div>input,
+        .stTextArea>div>div>textarea {
+            background-color: #1a1a1a;
+            border: 1px solid #404040;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: #ffffff;
+            font-size: 0.9375rem;
+        }
+
+        .stTextInput>div>div>input:focus,
+        .stTextArea>div>div>textarea:focus {
+            border-color: #ffffff;
+            background-color: #262626;
+        }
+
+        .stTextInput>div>div>input::placeholder,
+        .stTextArea>div>div>textarea::placeholder {
+            color: #737373;
+        }
+
+        /* Select boxes */
+        .stSelectbox>div>div>div {
+            background-color: #1a1a1a;
+            border: 1px solid #404040;
+            border-radius: 12px;
+            color: #ffffff;
+        }
+
+        /* Remove branding */
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+
+        /* Dark elegant scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #404040;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #525252;
+        }
+
+        /* Expander with dark theme */
+        .streamlit-expanderHeader {
+            background-color: #1a1a1a;
+            border: 1px solid #262626;
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .streamlit-expanderHeader:hover {
+            border-color: #404040;
+            background-color: #1f1f1f;
+        }
+
+        /* Charts and plots dark background */
+        .js-plotly-plot {
+            background-color: #1a1a1a !important;
+            border-radius: 12px;
+        }
+
+        /* Divider */
+        hr {
+            border-color: #262626;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+# Initialize at app start
+apply_modern_clean_css()
 # Page config
 st.set_page_config(
     page_title="AI Data Insights Generator",
     layout="wide",
-    page_icon="📊"
+    page_icon="🎧"
 )
 
 # Initialize session state
@@ -19,11 +311,11 @@ if 'insights' not in st.session_state:
     st.session_state.insights = None
 
 # Title
-st.title("📊 AI Dataset Insights Generator")
+st.title(" AI Dataset Insights Generator")
 st.markdown("Upload your dataset and get instant AI-powered insights with customizable visualizations")
 
 # Sidebar
-st.sidebar.header("📁 Upload Dataset")
+st.sidebar.header(" Upload Dataset")
 uploaded_file = st.sidebar.file_uploader(
     "Upload CSV or Excel file",
     type=['csv', 'xlsx', 'xls'],
@@ -54,7 +346,7 @@ if st.session_state.df is not None:
     df = st.session_state.df
     
     # Create tabs
-    tab1, tab2, tab3, tab4 = st.tabs(["📈 Overview", "🎨 Visualizations", "🤖 AI Insights", "📊 Custom Analysis"])
+    tab1, tab2, tab3, tab4 = st.tabs([" Overview", " Visualizations", " AI Insights", " Custom Analysis"])
     
     # Tab 1: Overview
     with tab1:
@@ -72,14 +364,14 @@ if st.session_state.df is not None:
         st.markdown("---")
         
         # Data preview
-        st.subheader("📋 Data Preview")
+        st.subheader(" Data Preview")
         st.dataframe(df.head(10), use_container_width=True)
         
         # Column info
         col1, col2 = st.columns(2)
         
         with col1:
-            st.subheader("📊 Column Information")
+            st.subheader(" Column Information")
             col_info = pd.DataFrame({
                 'Column': df.columns,
                 'Type': df.dtypes.values,
@@ -89,12 +381,12 @@ if st.session_state.df is not None:
             st.dataframe(col_info, use_container_width=True)
         
         with col2:
-            st.subheader("📈 Statistical Summary")
+            st.subheader(" Statistical Summary")
             st.dataframe(df.describe(), use_container_width=True)
     
     # Tab 2: Visualizations
     with tab2:
-        st.subheader("🎨 Create Custom Visualizations")
+        st.subheader(" Create Custom Visualizations")
         
         # Chart type selector
         chart_type = st.selectbox(
@@ -283,7 +575,7 @@ Format your response in clear sections with bullet points.
     
     # Tab 4: Custom Analysis
     with tab4:
-        st.subheader("📊 Custom Data Analysis")
+        st.subheader(" Custom Data Analysis")
         
         analysis_type = st.selectbox(
             "Select Analysis Type",
@@ -373,7 +665,7 @@ else:
     
     with col1:
         st.markdown("""
-        **📊 Data Overview**
+        **🤖  Data Overview**
         - Automatic data profiling
         - Statistical summaries
         - Missing value detection
@@ -381,7 +673,7 @@ else:
     
     with col2:
         st.markdown("""
-        **🎨 Visualizations**
+        **🤖  Visualizations**
         - 10+ chart types
         - Interactive plots
         - Full customization
