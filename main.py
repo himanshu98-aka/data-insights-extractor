@@ -247,7 +247,6 @@ def apply_modern_clean_css():
         /* Remove branding */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
-        header {visibility: hidden;}
 
         /* Dark elegant scrollbar */
         ::-webkit-scrollbar {
